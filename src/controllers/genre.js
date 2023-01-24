@@ -1,3 +1,30 @@
+const genres = [
+  { name: "Action", id: 1 },
+  { name: "Adventure", id: 2 },
+  { name: "Animation", id: 3 },
+  { name: "Biography", id: 4 },
+  { name: "Comedy", id: 5 },
+  { name: "Crime", id: 6 },
+  { name: "Documentary", id: 7 },
+  { name: "Drama", id: 8 },
+  { name: "Family", id: 9 },
+  { name: "Fantasy", id: 10 },
+  { name: "Film Noir", id: 11 },
+  { name: "History", id: 12 },
+  { name: "Horror", id: 13 },
+  { name: "Music", id: 14 },
+  { name: "Musical", id: 15 },
+  { name: "Mystery", id: 16 },
+  { name: "Romance", id: 17 },
+  { name: "Sci-Fi", id: 18 },
+  { name: "Short Film", id: 19 },
+  { name: "Sport", id: 20 },
+  { name: "Superhero", id: 21 },
+  { name: "Thriller", id: 22 },
+  { name: "War", id: 23 },
+  { name: "Western", id: 24 },
+];
+
 const getGenres = () => {
   return [
     "Action",

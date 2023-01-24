@@ -1,167 +1,175 @@
 const { Movie } = require("../db");
-const { Op } = require("sequelize");
+const {
+  getMoviesByNameAndActive,
+  getMoviesByName,
+  getMoviesByActive,
+  getMovies,
+} = require(`./movieHelpers.js`);
 
-const activateMovies = async (id) => {
-  const movie = await Movie.findByPk(id);
-  if (movie) {
-    await movie.update({
-      active: true,
-    });
-    return true;
-  } else {
-    return false;
+const getMoviesById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const movie = await Movie.findByPk(id);
+    movie
+      ? res.status(200).json(movie)
+      : res.status(404).json({ message: "Movie not found" });
+  } catch (error) {
+    res.status(404).json(error.message);
   }
 };
 
-const deleteMovies = async (id) => {
-  const movie = await Movie.findByPk(id);
-  if (movie) {
-    await movie.update({
-      active: false,
-    });
-    return true;
-  } else {
-    return false;
+const getMoviesByParameter = async (req, res, next) => {
+  const { name, active } = req.query;
+  try {
+    if (name && active) {
+      let movie = await getMoviesByNameAndActive(name, active);
+      return movie.length > 0
+        ? res.status(200).json(movie)
+        : res
+            .status(404)
+            .json({ message: "No movie found with the specified criteria" });
+    }
+
+    if (name) {
+      let movie = await getMoviesByName(name);
+      return movie.length > 0
+        ? res.status(200).json(movie)
+        : res.status(404).json({ message: "No movie found with that name" });
+    }
+
+    if (active) {
+      let movie = await getMoviesByActive(active);
+      return movie.length > 0
+        ? res.status(200).json(movie)
+        : res
+            .status(404)
+            .json({ message: "No movie found with the specified criteria" });
+    }
+
+    if (!name && !active) {
+      let movies = await getMovies();
+      return movies.length > 0
+        ? res.status(200).json(movies)
+        : res.status(404).json({ message: "No movies found" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
-const getMovies = async () => {
-  return await Movie.findAll();
-};
-
-const getMoviesByActive = async (active) => {
-  return await Movie.findAll({
-    where: {
-      active: active,
-    },
-  });
-};
-
-const getMoviesById = async (id) => {
-  return await Movie.findByPk(id);
-};
-
-const getMoviesByName = async (name) => {
-  return await Movie.findAll({
-    where: {
-      title: {
-        [Op.iLike]: `%${name}%`,
-      },
-    },
-  });
-};
-
-const getMoviesByNameAndActive = async (name, active) => {
-  return await Movie.findAll({
-    where: {
-      title: {
-        [Op.iLike]: `%${name}%`,
-      },
-      active: active,
-    },
-  });
-};
-
-const getMoviesByParameter = async (name, active) => {
-  if (name && active !== undefined)
-    return await getMoviesByNameAndActive(name, active);
-
-  if (name) return await getMoviesByName(name);
-
-  if (active !== undefined) return await getMoviesByActive(active);
-
-  return await getMovies();
-};
-
-const postMovies = async (data) => {
+const postMovies = async (req, res, next) => {
   const {
     title,
     description,
     poster,
-    image_1,
-    image_2,
     teaser,
     genre,
     display,
     classification,
     cast,
     director,
-    writter,
     language,
     duration,
     comingSoon,
-  } = data;
+  } = req.body;
 
-  const movie = await Movie.create({
-    title,
-    description,
-    poster,
-    image_1,
-    image_2,
-    teaser,
-    genre,
-    display,
-    duration: parseInt(duration),
-    classification,
-    cast,
-    director,
-    writter,
-    language,
-    comingSoon: comingSoon === "true" ? true : false,
-  });
-  return movie;
+  try {
+    const created = await Movie.findOrCreate({
+      where: { title },
+      defaults: {
+        title,
+        description,
+        poster,
+        teaser,
+        genre,
+        display,
+        duration: parseInt(duration),
+        classification,
+        cast,
+        director,
+        language,
+        comingSoon: comingSoon === "true" ? true : false,
+      },
+    });
+    !created
+      ? res.status(400).json({ message: "Movie already exists" })
+      : res.status(200).json({ message: "Movie created" });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const putMovies = async (id, data) => {
+const putMovies = async (req, res, next) => {
   const {
     title,
     description,
     poster,
-    image_1,
-    image_2,
     teaser,
     genre,
     display,
     classification,
     cast,
     director,
-    writter,
     language,
     duration,
     comingSoon,
-  } = data;
+  } = req.body;
 
-  const movie = await Movie.findByPk(id);
-  if (movie) {
-    const result = await movie.update({
+  const { id } = req.params;
+  try {
+    const movie = await Movie.findByPk(id);
+    if (!movie) res.status(404).json({ message: "Movie not found" });
+    const movieUpdated = await movie.update({
       title,
       description,
       poster,
-      image_1,
-      image_2,
       teaser,
       genre,
       display,
       classification,
       cast,
       director,
-      writter,
       language,
       duration: parseInt(duration),
       comingSoon: comingSoon === "true" ? true : false,
     });
-    return result;
+    if (movieUpdated) res.status(201).json({ message: "Movie edited" });
+  } catch (error) {
+    res.status(404).json(error.message);
   }
-  return false;
+};
+
+const activateMovies = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const movie = await Movie.findByPk(id);
+    await movie.update({
+      active: true,
+    });
+    res.status(201).json({ message: "Movie activated" });
+  } catch (error) {
+    res.status(404).json(error.message);
+  }
+};
+
+const deleteMovies = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const movie = await Movie.findByPk(id);
+    await movie.update({
+      active: false,
+    });
+    res.status(201).json({ message: "Movie deactivated" });
+  } catch (error) {
+    res.status(404).json(error.message);
+  }
 };
 
 module.exports = {
-  activateMovies,
-  deleteMovies,
-  getMovies,
-  getMoviesByActive,
   getMoviesById,
   getMoviesByParameter,
   postMovies,
   putMovies,
+  activateMovies,
+  deleteMovies,
 };

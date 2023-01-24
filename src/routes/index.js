@@ -1,16 +1,7 @@
 const { Router } = require("express");
-const axios = require("axios");
-
-require("dotenv").config();
 
 const router = Router();
 
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
-
-//Agrega el enrutado de /users
-
-//Esta sería la información para el index.js modularizando las rutas//
 const MovieRouter = require("./movie.js");
 const RatingRouter = require("./rating.js");
 const ProductRouter = require("./product.js");
