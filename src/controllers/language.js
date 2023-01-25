@@ -4,7 +4,9 @@ const LANGUAGES = require("../dbData/dbLanguages");
 const getLanguage = async (req, res, next) => {
   try {
     let response = await Language.findAll();
-    res.status(200).json(response);
+    response.length > 0
+      ? res.status(200).json(response)
+      : res.status(404).json({ message: "No languages were found" });
   } catch (error) {
     res.status(400).json(error.message);
   }

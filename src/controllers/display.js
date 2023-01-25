@@ -4,7 +4,9 @@ const DISPLAYS = require("../dbData/dbDisplay");
 const getDisplay = async (req, res, next) => {
   try {
     let response = await Display.findAll();
-    res.status(200).json(response);
+    response.length > 0
+      ? res.status(200).json(response)
+      : res.status(404).json({ message: "No displays were found" });
   } catch (error) {
     res.status(400).json(error.message);
   }

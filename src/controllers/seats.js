@@ -4,7 +4,9 @@ const SEATS = require("../dbData/dbSeats");
 const getSeats = async (req, res, next) => {
   try {
     let response = await Seat.findAll();
-    res.status(200).json(response);
+    response.length > 0
+      ? res.status(200).json(response)
+      : res.status(404).json({ message: "No seats were found" });
   } catch (error) {
     res.status(400).json(error.message);
   }

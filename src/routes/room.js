@@ -2,7 +2,6 @@ const { Router } = require("express");
 const {
   deleteRoom,
   getRoom,
-  getRoomByName,
   postRoom,
   putRooms,
   activateRoom,
@@ -10,27 +9,10 @@ const {
 
 const router = Router();
 
-//! Busca alguna room por nombre o todas
-router.get("/", async (req, res, next) => {
-  const { name } = req.query;
-  if (name) {
-    try {
-      const rooms = await getRoomByName(name);
-      if (rooms.length > 0) return res.send(rooms);
-      else return res.send("Room not found");
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    try {
-      const rooms = await getRoom();
-      return res.json(rooms);
-    } catch (error) {
-      next(error);
-    }
-  }
-});
+router.get("/", getRoom);
+
 //! Busca las rooms por tipo de display (2D, 3D, 4D, 5D, 6D...)
+
 router.get("/:displayMovie", async (req, res, next) => {
   try {
     const getRooms = await getRoom();

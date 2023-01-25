@@ -4,7 +4,9 @@ const GENRES = require("../dbData/dbGenres");
 const getGenres = async (req, res, next) => {
   try {
     let response = await Genre.findAll();
-    res.status(200).json(response);
+    response.length > 0
+      ? res.status(200).json(response)
+      : res.status(404).json({ message: "No genres were found" });
   } catch (error) {
     res.status(400).json(error.message);
   }
