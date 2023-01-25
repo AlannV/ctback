@@ -1,14 +1,7 @@
 const { Router } = require("express");
-const { getDisplay } = require("../controllers/display.js");
+const { getDisplay, createDisplay } = require("../controllers/display.js");
 const router = Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const display = getDisplay(); // await no tiene efecto porque trae es un array.
-    res.json(display);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get("/", getDisplay).post("/", createDisplay);
 
 module.exports = router;

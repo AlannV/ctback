@@ -11,35 +11,41 @@ const { DataTypes } = require("sequelize");
 //   }
 
 module.exports = (sequelize) => {
-  sequelize.define("Purchase", {
-    purchase_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    // user_id: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
-    // date_time: {
-    //   type: DataTypes.DATE,
-    //   allowNull: false,
-    //   // validate: {      // verificar como funciona este validador.
-    //   //   isDate: true,
-    //   // }
-    // },
-    amount: {
-      type: DataTypes.FLOAT,
-      //allowNull: false,
-      validate: {
-        isFloat: true,
+  sequelize.define(
+    "Purchase",
+    {
+      purchase_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      // user_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      // },
+      // date_time: {
+      //   type: DataTypes.DATE,
+      //   allowNull: false,
+      //   // validate: {      // verificar como funciona este validador.
+      //   //   isDate: true,
+      //   // }
+      // },
+      amount: {
+        type: DataTypes.FLOAT,
+        //allowNull: false,
+        validate: {
+          isFloat: true,
+        },
+      },
+      status: {
+        type: DataTypes.STRING(20),
+      },
+      mp_id: {
+        type: DataTypes.STRING, //hacer integer
       },
     },
-    status: {
-      type: DataTypes.STRING(20),
-    },
-    mp_id: {
-      type: DataTypes.STRING, //hacer integer
-    },
-  });
+    {
+      timestamps: false,
+    }
+  );
 };

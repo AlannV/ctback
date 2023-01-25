@@ -1,62 +1,47 @@
-const languages = [
-  { name: "Arabic", id: 1 },
-  { name: "Cantonese", id: 2 },
-  { name: "Czech", id: 3 },
-  { name: "Danish", id: 4 },
-  { name: "Dutch", id: 5 },
-  { name: "English", id: 6 },
-  { name: "French", id: 7 },
-  { name: "German", id: 8 },
-  { name: "Hebrew", id: 9 },
-  { name: "Hindi", id: 10 },
-  { name: "Italian", id: 11 },
-  { name: "Japanese", id: 12 },
-  { name: "Korean", id: 13 },
-  { name: "Malayalam", id: 14 },
-  { name: "Mandarin", id: 15 },
-  { name: "Norwegian", id: 16 },
-  { name: "Polish", id: 17 },
-  { name: "Portuguese", id: 18 },
-  { name: "Punjabi", id: 19 },
-  { name: "Romanian", id: 20 },
-  { name: "Russian", id: 21 },
-  { name: "Spanish", id: 22 },
-  { name: "Swedish", id: 23 },
-  { name: "Tamil", id: 24 },
-  { name: "Telugu", id: 25 },
-  { name: "Turkish", id: 26 },
-];
+const { Language } = require("../db");
+const LANGUAGES = require("../dbData/dbLanguages");
 
-const getLanguage = () => {
-  return [
-    "English",
-    "French",
-    "Spanish",
-    "Mandarin",
-    "Italian",
-    "Japanese",
-    "Korean",
-    "German",
-    "Russian",
-    "Hindi",
-    "Turkish",
-    "Portuguese",
-    "Arabic",
-    "Tamil",
-    "Dutch",
-    "Cantonese",
-    "Telugu",
-    "Polish",
-    "Czech",
-    "Punjabi",
-    "Hebrew",
-    "Malayalam",
-    "Swedish",
-    "Danish",
-    "Romanian",
-    "Norwegian",
-  ];
+const getLanguage = async (req, res, next) => {
+  try {
+    let response = await Language.findAll();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
 };
+
+const createLanguage = async (req, res, next) => {
+  let { name } = req.body;
+  try {
+    await Language.findOrCreate({
+      where: { name },
+      defaults: {
+        name,
+      },
+    });
+    res.status(200).json({ message: "Language created" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+const fillLanguageDb = async () => {
+  const create = await Language.bulkCreate(
+    LANGUAGES.map((l) => {
+      return {
+        name: l,
+      };
+    })
+  );
+  if (!create) {
+    throw new Error("Error loading the languages into the database");
+  } else {
+    console.log("Languages succesfully loaded into the database");
+  }
+};
+
 module.exports = {
   getLanguage,
+  createLanguage,
+  fillLanguageDb,
 };

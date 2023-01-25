@@ -10,21 +10,27 @@ const { DataTypes } = require("sequelize");
 //   }
 
 module.exports = (sequelize) => {
-  sequelize.define("ProductDetail", {
-    product_detail_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    product_quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        isInt: true,
+  sequelize.define(
+    "ProductDetail",
+    {
+      product_detail_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      product_quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isInt: true,
+        },
+      },
+      price: {
+        type: DataTypes.FLOAT(2),
       },
     },
-    price: {
-      type: DataTypes.FLOAT(2),
-    },
-  });
+    {
+      timestamps: false,
+    }
+  );
 };

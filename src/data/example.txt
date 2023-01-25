@@ -33,39 +33,3 @@ RATING EXAMPLE
   "review": "la mejor pelicula de la década",
 }
 
-
--------------------------------------------------------------------------------
-
-ARRAYS
-
-DISPLAYS EXAMPLE
-[
-  "2D",
-  "3D",
-  "4DX",
-  "IMAX"
-]
-GENRES EXAMPLE
-[
-  "Action",
-  "Adventure",
-  "Animation",
-  "Anime",
-  "Biography",
-  "Comedy",
-  "Crime",
-  "Documentary",
-  "Drama",
-  "Family",
-  "Fantasy",
-  "History",
-  "Horror",
-  "Music",
-  "Mystery",
-  "Romance",
-  "Sci-Fi",
-  "Sport",
-  "Thriller",
-  "War",
-  "Western"
-]

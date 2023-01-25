@@ -4,7 +4,9 @@ const {
   getMoviesByName,
   getMoviesByActive,
   getMovies,
-} = require(`./movieHelpers.js`);
+} = require(`../helpers/movieHelpers.js`);
+
+const MOVIES = require("../dbData/dbMovies");
 
 const getMoviesById = async (req, res, next) => {
   const { id } = req.params;
@@ -165,6 +167,15 @@ const deleteMovies = async (req, res, next) => {
   }
 };
 
+const fillMoviesDb = async (req, res, next) => {
+  const create = await Movie.bulkCreate(MOVIES.map((c) => c));
+  if (!create) {
+    throw new Error("Error loading the movies into the database");
+  } else {
+    console.log("Movies successfully loaded into the database");
+  }
+};
+
 module.exports = {
   getMoviesById,
   getMoviesByParameter,
@@ -172,4 +183,5 @@ module.exports = {
   putMovies,
   activateMovies,
   deleteMovies,
+  fillMoviesDb,
 };

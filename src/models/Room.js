@@ -9,34 +9,40 @@ const { DataTypes } = require("sequelize");
 //   }
 
 module.exports = (sequelize) => {
-  sequelize.define("Room", {
-    room_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+  sequelize.define(
+    "Room",
+    {
+      room_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      // seats_amount: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   validate: {
+      //     isInt: true,
+      //   },
+      // },
+      room_seats: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        //allowNull: false,
+      },
+      display_type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    // seats_amount: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   validate: {
-    //     isInt: true,
-    //   },
-    // },
-    room_seats: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      //allowNull: false,
-    },
-    display_type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-  });
+    {
+      timestamps: false,
+    }
+  );
 };

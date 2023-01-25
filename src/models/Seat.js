@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "Genre",
+    "Seat",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -11,6 +11,10 @@ module.exports = (sequelize) => {
       },
       name: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      available: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
     },

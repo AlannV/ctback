@@ -1,15 +1,11 @@
 const { Router } = require("express");
 
-const { getClassifications } = require("../controllers/classification.js");
+const {
+  getClassifications,
+  createClassification,
+} = require("../controllers/classification.js");
 const router = Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const classifications = getClassifications(); // await no tiene efecto.
-    res.json(classifications);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get("/", getClassifications).post("/", createClassification);
 
 module.exports = router;

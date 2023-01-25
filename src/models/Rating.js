@@ -9,30 +9,36 @@ const { DataTypes } = require("sequelize");
 //   }
 
 module.exports = (sequelize) => {
-  sequelize.define("Rating", {
-    rating_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    // movie_id: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
-    // user_id: {
-    //   type: DataTypes.INTEGER,
-    // },
-    rate: {
-      type: DataTypes.INTEGER,
-      validate: {
-        // validar que el dato sea un entero y su valor no se salga del rango definido
-        isInt: true,
-        min: 1,
-        max: 5,
+  sequelize.define(
+    "Rating",
+    {
+      rating_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      // movie_id: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      // },
+      // user_id: {
+      //   type: DataTypes.INTEGER,
+      // },
+      rate: {
+        type: DataTypes.INTEGER,
+        validate: {
+          // validar que el dato sea un entero y su valor no se salga del rango definido
+          isInt: true,
+          min: 1,
+          max: 5,
+        },
+      },
+      review: {
+        type: DataTypes.TEXT,
       },
     },
-    review: {
-      type: DataTypes.TEXT,
-    },
-  });
+    {
+      timestamps: false,
+    }
+  );
 };

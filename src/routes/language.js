@@ -1,15 +1,8 @@
 const { Router } = require("express");
 
-const { getLanguage } = require("../controllers/language.js");
+const { getLanguage, createLanguage } = require("../controllers/language.js");
 const router = Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const languages = getLanguage(); // await no tiene efecto porque trae es un array.
-    res.json(languages);
-  } catch (e) {
-    next(e);
-  }
-});
+router.get("/", getLanguage).post("/", createLanguage);
 
 module.exports = router;

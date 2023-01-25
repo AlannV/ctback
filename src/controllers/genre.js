@@ -1,58 +1,44 @@
-const genres = [
-  { name: "Action", id: 1 },
-  { name: "Adventure", id: 2 },
-  { name: "Animation", id: 3 },
-  { name: "Biography", id: 4 },
-  { name: "Comedy", id: 5 },
-  { name: "Crime", id: 6 },
-  { name: "Documentary", id: 7 },
-  { name: "Drama", id: 8 },
-  { name: "Family", id: 9 },
-  { name: "Fantasy", id: 10 },
-  { name: "Film Noir", id: 11 },
-  { name: "History", id: 12 },
-  { name: "Horror", id: 13 },
-  { name: "Music", id: 14 },
-  { name: "Musical", id: 15 },
-  { name: "Mystery", id: 16 },
-  { name: "Romance", id: 17 },
-  { name: "Sci-Fi", id: 18 },
-  { name: "Short Film", id: 19 },
-  { name: "Sport", id: 20 },
-  { name: "Superhero", id: 21 },
-  { name: "Thriller", id: 22 },
-  { name: "War", id: 23 },
-  { name: "Western", id: 24 },
-];
+const { Genre } = require("../db");
+const GENRES = require("../dbData/dbGenres");
 
-const getGenres = () => {
-  return [
-    "Action",
-    "Adventure",
-    "Animation",
-    "Biography",
-    "Comedy",
-    "Crime",
-    "Documentary",
-    "Drama",
-    "Family",
-    "Fantasy",
-    "Film Noir",
-    "History",
-    "Horror",
-    "Music",
-    "Musical",
-    "Mystery",
-    "Romance",
-    "Sci-Fi",
-    "Short Film",
-    "Sport",
-    "Superhero",
-    "Thriller",
-    "War",
-    "Western",
-  ];
+const getGenres = async (req, res, next) => {
+  try {
+    let response = await Genre.findAll();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+const createGenre = async (req, res, next) => {
+  let { name } = req.body;
+  try {
+    await Genre.findOrCreate({
+      where: { name },
+      defaults: {
+        name,
+      },
+    });
+    res.status(200).json({ message: "Genre created" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fillGenreDb = async (req, res, next) => {
+  const create = await Genre.bulkCreate(
+    GENRES.map((g) => {
+      return { name: g };
+    })
+  );
+  if (!create) {
+    throw new Error("Error loading the genres into the database");
+  } else {
+    console.log("Genres successfully loaded into the database");
+  }
 };
 module.exports = {
   getGenres,
+  createGenre,
+  fillGenreDb,
 };
