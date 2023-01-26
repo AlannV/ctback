@@ -1,5 +1,6 @@
 const { Display } = require("../db");
 const DISPLAYS = require("../dbData/dbDisplay");
+const { onlyLettersOrNumbersCheck } = require("../helpers/validateInput");
 
 const getDisplay = async (req, res, next) => {
   try {
@@ -14,6 +15,8 @@ const getDisplay = async (req, res, next) => {
 
 const createDisplay = async (req, res, next) => {
   let { name } = req.body;
+  let check = onlyLettersOrNumbersCheck(name);
+  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
   try {
     await Display.findOrCreate({
       where: { name },

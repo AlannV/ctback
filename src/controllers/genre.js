@@ -1,5 +1,6 @@
 const { Genre } = require("../db");
 const GENRES = require("../dbData/dbGenres");
+const { onlyLettersCheck } = require("../helpers/validateInput");
 
 const getGenres = async (req, res, next) => {
   try {
@@ -14,6 +15,9 @@ const getGenres = async (req, res, next) => {
 
 const createGenre = async (req, res, next) => {
   let { name } = req.body;
+  let check = onlyLettersCheck(name);
+  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
+
   try {
     await Genre.findOrCreate({
       where: { name },

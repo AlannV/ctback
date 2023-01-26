@@ -5,11 +5,19 @@ const {
   getMoviesByActive,
   getMovies,
 } = require(`../helpers/movieHelpers.js`);
+const {
+  onlyNumbersCheck,
+  onlyLettersOrNumbersCheck,
+} = require("../helpers/validateInput");
 
 const MOVIES = require("../dbData/dbMovies");
 
 const getMoviesById = async (req, res, next) => {
   const { id } = req.params;
+
+  let check = onlyNumbersCheck(id);
+  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
+
   try {
     const movie = await Movie.findByPk(id);
     movie
@@ -22,8 +30,16 @@ const getMoviesById = async (req, res, next) => {
 
 const getMoviesByParameter = async (req, res, next) => {
   const { name, active } = req.query;
+
+  let check = onlyLettersOrNumbersCheck(name);
+
   try {
     if (name && active) {
+      if (check !== true)
+        return res.status(500).json({ message: "Invalid Input" });
+
+      if (typeof active !== "boolean")
+        return res.status(500).json({ message: "Invalid Input" });
       let movie = await getMoviesByNameAndActive(name, active);
       return movie.length > 0
         ? res.status(200).json(movie)
@@ -33,6 +49,9 @@ const getMoviesByParameter = async (req, res, next) => {
     }
 
     if (name) {
+      if (check !== true)
+        return res.status(500).json({ message: "Invalid Input" });
+
       let movie = await getMoviesByName(name);
       return movie.length > 0
         ? res.status(200).json(movie)
@@ -40,6 +59,8 @@ const getMoviesByParameter = async (req, res, next) => {
     }
 
     if (active) {
+      if (typeof active !== "boolean")
+        return res.status(500).json({ message: "Invalid Input" });
       let movie = await getMoviesByActive(active);
       return movie.length > 0
         ? res.status(200).json(movie)

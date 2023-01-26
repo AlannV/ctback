@@ -1,5 +1,6 @@
 const { Language } = require("../db");
 const LANGUAGES = require("../dbData/dbLanguages");
+const { onlyLettersCheck } = require("../helpers/validateInput");
 
 const getLanguage = async (req, res, next) => {
   try {
@@ -14,6 +15,8 @@ const getLanguage = async (req, res, next) => {
 
 const createLanguage = async (req, res, next) => {
   let { name } = req.body;
+  let check = onlyLettersCheck(name);
+  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
   try {
     await Language.findOrCreate({
       where: { name },

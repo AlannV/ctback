@@ -19,34 +19,25 @@ users.get("/isActive", checkActiveUser, async (req, res) => {
 
   try {
     const user = await User.findByPk(uid);
-
-    //Lineas agregadas para ambientes de test
     if (user === null)
       return res.status(204).send({ message: "User no longer active" });
-    //
     return res.status(200).send({ email: user.email, name: user.name });
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }
 });
 
-//Busca a todos los usuarios, con la opcion de pasarle
-//el parametro "active"
 users.get("/getAll", async (req, res) => {
   const { active } = req.query;
 
   try {
-    const usersResult = await User
-      .findAll
-      //userHelper.getUsersOptionalParameter(active)
-      ();
+    const usersResult = await User.findAll();
     res.status(200).send(usersResult);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
-//Setea el flag de active en false
 users.put("/banUser", async (req, res) => {
   const { email } = req.body;
 
@@ -80,7 +71,6 @@ users.put("/modifyRole", async (req, res) => {
   }
 });
 
-//Setea el flag de active en true
 users.put("/unbanUser", async (req, res) => {
   const { email } = req.body;
 
@@ -97,35 +87,29 @@ users.put("/unbanUser", async (req, res) => {
   }
 });
 
-//Crea un usuario en nuestra DB, asignandole un rol y la referencia al UID de firebase
-users.post(
-  "/createUser",
-  getUID, //Se comenta para probar insertar datos falsos que no se pueden validar en firebase
-  async (req, res) => {
-    const { email, username, role } = req.body;
-    const uid = req.uid;
+users.post("/createUser", getUID, async (req, res) => {
+  const { email, username, role } = req.body;
+  const uid = req.uid;
 
-    if (!email || !username || email === "" || username === "")
-      return res.status(400).send({
-        message: "All creation fields must be sent, and they can't be empty",
-      });
+  if (!email || !username || email === "" || username === "")
+    return res.status(400).send({
+      message: "All creation fields must be sent, and they can't be empty",
+    });
 
-    try {
-      await User.create({
-        user_id: uid,
-        name: username,
-        email: email,
-        role_id: "A",
-        active: true,
-      });
-      return res.status(201).send({ message: "User created" });
-    } catch (err) {
-      return res.status(400).send({ message: err.message });
-    }
+  try {
+    await User.create({
+      user_id: uid,
+      name: username,
+      email: email,
+      role_id: "A",
+      active: true,
+    });
+    return res.status(201).send({ message: "User created" });
+  } catch (err) {
+    return res.status(400).send({ message: err.message });
   }
-);
+});
 
-//Valida que el usuario sea admin
 users.post("/isAdmin", getUID, async (req, res) => {
   const uid = req.uid;
 
