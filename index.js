@@ -7,14 +7,14 @@ const { fillMoviesDb } = require("./src/controllers/movie.js");
 const { fillSeatsDb } = require("./src/controllers/seats.js");
 const { conn } = require("./src/db.js");
 
-//conn.sync({ alter: true }).then(() => {
-conn.sync({ force: true }).then(() => {
-  fillDisplayDb();
-  fillGenreDb();
-  fillLanguageDb();
-  fillClassificationDb();
-  fillSeatsDb();
-  fillMoviesDb();
+conn.sync({ force: false }).then(() => {
+  // conn.sync({ alter: true }).then(() => {
+  // fillDisplayDb();
+  // fillGenreDb();
+  // fillLanguageDb();
+  // fillClassificationDb();
+  // fillSeatsDb();
+  // fillMoviesDb();
   server.listen(process.env.PORT || 3001, () => {
     console.log("listening at port " + process.env.PORT); // eslint-disable-line no-console
   });
