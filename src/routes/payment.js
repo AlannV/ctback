@@ -146,9 +146,9 @@ payment.post("/", getUID, async (req, res, next) => {
         installments: 3,
       },
       back_urls: {
-        success: "http://localhost:3001/payment/followUp",
-        failure: "http://localhost:3001/payment/followUp",
-        pending: "http://localhost:3001/payment/followUp",
+        success: "https://ctback-production.up.railway.app/payment/followUp",
+        failure: "https://ctback-production.up.railway.app/payment/followUp",
+        pending: "https://ctback-production.up.railway.app/payment/followUp",
       },
     };
     mercadopago.preferences
