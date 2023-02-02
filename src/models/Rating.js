@@ -27,7 +27,6 @@ module.exports = (sequelize) => {
       rate: {
         type: DataTypes.INTEGER,
         validate: {
-          // validar que el dato sea un entero y su valor no se salga del rango definido
           isInt: true,
           min: 1,
           max: 5,

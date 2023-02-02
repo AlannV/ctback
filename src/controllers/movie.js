@@ -16,7 +16,7 @@ const getMoviesById = async (req, res, next) => {
   const { id } = req.params;
 
   let check = onlyNumbersCheck(id);
-  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
+  if (check !== true) return res.status(412).json({ message: "Invalid Input" });
 
   try {
     const movie = await Movie.findByPk(id);
@@ -31,11 +31,12 @@ const getMoviesById = async (req, res, next) => {
 const getMoviesByParameter = async (req, res, next) => {
   const { name, active } = req.query;
 
-  let check = onlyLettersOrNumbersCheck(name);
+  let checkName = onlyLettersOrNumbersCheck(name);
+  let checkActive = name;
 
   try {
     if (name && active) {
-      if (check !== true)
+      if (checkName !== true)
         return res.status(500).json({ message: "Invalid Input" });
 
       if (typeof active !== "boolean")
@@ -49,7 +50,7 @@ const getMoviesByParameter = async (req, res, next) => {
     }
 
     if (name) {
-      if (check !== true)
+      if (checkName !== true)
         return res.status(500).json({ message: "Invalid Input" });
 
       let movie = await getMoviesByName(name);

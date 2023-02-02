@@ -241,16 +241,8 @@ const revertPurchase = async (req, res) => {
 };
 
 const followUpPayment = async (req, res) => {
-  console.log("hello");
   const payment_status = req.query.status;
   let status = payment_status === "approved" ? "Approved" : "Pay In Process";
-  const payment_id = req.query.payment_id;
-  console.log(payment_id);
-  // const payment_status = req.query.status;
-  const external_reference = req.query.external_reference;
-  console.log(external_reference);
-  const merchant_order_id = req.query.merchant_order_id;
-  console.log(merchant_order_id);
   switch (status) {
     case "Approved":
       return res.redirect(FRONT_URL_SUCCESS);

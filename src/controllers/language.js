@@ -9,14 +9,14 @@ const getLanguage = async (req, res, next) => {
       ? res.status(200).json(response)
       : res.status(404).json({ message: "No languages were found" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
 const createLanguage = async (req, res, next) => {
   let { name } = req.body;
   let check = onlyLettersCheck(name);
-  if (check !== true) return res.status(500).json({ message: "Invalid Input" });
+  if (check !== true) return res.status(412).json({ message: "Invalid Input" });
   try {
     await Language.findOrCreate({
       where: { name },
@@ -24,9 +24,9 @@ const createLanguage = async (req, res, next) => {
         name,
       },
     });
-    res.status(200).json({ message: "Language created" });
+    res.status(201).json({ message: "Language created" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(500).json(error.message);
   }
 };
 
