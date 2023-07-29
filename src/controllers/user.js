@@ -177,6 +177,7 @@ const isAdmin = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  console.log(req.body);
   const { email, username, role } = req.body;
   const uid = req.uid;
 

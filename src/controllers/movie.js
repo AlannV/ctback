@@ -8,18 +8,19 @@ const {
 const {
   onlyNumbersCheck,
   onlyLettersOrNumbersCheck,
+  isBoolean,
 } = require("../helpers/validateInput");
 
 const MOVIES = require("../dbData/dbMovies");
 
 const getMoviesById = async (req, res, next) => {
   const { id } = req.params;
-
   let check = onlyNumbersCheck(id);
   if (check !== true) return res.status(412).json({ message: "Invalid Input" });
 
   try {
     const movie = await Movie.findByPk(id);
+    console.log(movie);
     movie
       ? res.status(200).json(movie)
       : res.status(404).json({ message: "Movie not found" });
@@ -30,17 +31,16 @@ const getMoviesById = async (req, res, next) => {
 
 const getMoviesByParameter = async (req, res, next) => {
   const { name, active } = req.query;
-
   let checkName = onlyLettersOrNumbersCheck(name);
-  let checkActive = name;
+  let checkBool = isBoolean(active);
 
   try {
     if (name && active) {
       if (checkName !== true)
         return res.status(500).json({ message: "Invalid Input" });
 
-      if (typeof active !== "boolean")
-        return res.status(500).json({ message: "Invalid Input" });
+      if (!checkBool) return res.status(500).json({ message: "Invalid Input" });
+
       let movie = await getMoviesByNameAndActive(name, active);
       return movie.length > 0
         ? res.status(200).json(movie)
@@ -60,8 +60,7 @@ const getMoviesByParameter = async (req, res, next) => {
     }
 
     if (active) {
-      if (typeof active !== "boolean")
-        return res.status(500).json({ message: "Invalid Input" });
+      if (!checkBool) return res.status(500).json({ message: "Invalid Input" });
       let movie = await getMoviesByActive(active);
       return movie.length > 0
         ? res.status(200).json(movie)
@@ -81,6 +80,8 @@ const getMoviesByParameter = async (req, res, next) => {
   }
 };
 
+// faltan chequeos de inputs
+// relaciones de genre, classification, language, display
 const postMovies = async (req, res, next) => {
   const {
     title,
@@ -123,6 +124,8 @@ const postMovies = async (req, res, next) => {
   }
 };
 
+// faltan chequeos de inputs
+// relaciones de genre, classification, language, display
 const putMovies = async (req, res, next) => {
   const {
     title,

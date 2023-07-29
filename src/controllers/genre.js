@@ -19,13 +19,15 @@ const createGenre = async (req, res, next) => {
   if (check !== true) return res.status(412).json({ message: "Invalid Input" });
 
   try {
-    await Genre.findOrCreate({
+    let genre = await Genre.findOrCreate({
       where: { name },
       defaults: {
         name,
       },
     });
-    res.status(201).json({ message: "Genre created" });
+    genre[0]._options.isNewRecord
+      ? res.status(201).json({ message: "Genre created" })
+      : res.status(409).json({ message: "Genre already exists" });
   } catch (error) {
     res.status(500).json(error.message);
   }

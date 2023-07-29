@@ -7,8 +7,8 @@ const { fillMoviesDb } = require("./src/controllers/movie.js");
 const { fillSeatsDb } = require("./src/controllers/seats.js");
 const { conn } = require("./src/db.js");
 
+// conn.sync({ force: false }).then(() => {
 conn.sync({ force: false }).then(() => {
-  // conn.sync({ alter: true }).then(() => {
   // fillDisplayDb();
   // fillGenreDb();
   // fillLanguageDb();

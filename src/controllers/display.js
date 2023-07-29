@@ -4,7 +4,9 @@ const { onlyLettersOrNumbersCheck } = require("../helpers/validateInput");
 
 const getDisplay = async (req, res, next) => {
   try {
-    let response = await Display.findAll();
+    let response = await Display.findAll({
+      attributes: ["name"],
+    });
     response.length > 0
       ? res.status(200).json(response)
       : res.status(404).json({ message: "No displays were found" });
@@ -18,13 +20,15 @@ const createDisplay = async (req, res, next) => {
   let check = onlyLettersOrNumbersCheck(name);
   if (check !== true) return res.status(412).json({ message: "Invalid Input" });
   try {
-    await Display.findOrCreate({
+    let display = await Display.findOrCreate({
       where: { name },
       defaults: {
         name,
       },
     });
-    res.status(201).json({ message: "Display Created" });
+    display[0]._options.isNewRecord
+      ? res.status(201).json({ message: "Display Created" })
+      : res.status(409).json({ message: "Display already exists" });
   } catch (error) {
     res.status(500).json(error.message);
   }

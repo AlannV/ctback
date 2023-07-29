@@ -5,16 +5,16 @@ const path = require("path");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_DEPLOY } = process.env;
 
-// `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`;
 // DB_URI
+// `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
 const sequelize = new Sequelize(DB_DEPLOY, {
   dialect: "postgresql",
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false,
+  //   },
+  // },
   logging: false,
   native: false,
 });
@@ -92,14 +92,4 @@ Movie.belongsToMany(Genre, { through: "movie_genre" });
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importar la conexión { conn } = require('./db.js');
-};
-
-const hotel = {
-  id: 1,
-  name: "hotel",
-  description: "hotel",
-  state: "buenos aires",
-  address: "hotel",
-  city: "hotel",
-  rooms: [{}, {}],
 };

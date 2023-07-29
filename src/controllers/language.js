@@ -17,14 +17,17 @@ const createLanguage = async (req, res, next) => {
   let { name } = req.body;
   let check = onlyLettersCheck(name);
   if (check !== true) return res.status(412).json({ message: "Invalid Input" });
+
   try {
-    await Language.findOrCreate({
+    let language = await Language.findOrCreate({
       where: { name },
       defaults: {
         name,
       },
     });
-    res.status(201).json({ message: "Language created" });
+    language[0]._options.isNewRecord
+      ? res.status(201).json({ message: "Language created" })
+      : res.status(409).json({ message: "Language already exists" });
   } catch (error) {
     res.status(500).json(error.message);
   }

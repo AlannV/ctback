@@ -37,6 +37,18 @@ const isArrayOfStrigs = (input) => {
   );
 };
 
+const isBoolean = (input) => {
+  if (
+    input !== true ||
+    input !== false ||
+    input !== "true" ||
+    input !== "false"
+  ) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   onlyLettersOrNumbersCheck,
   containLettersCheck,
@@ -46,6 +58,7 @@ module.exports = {
   containSymbolsCheck,
   httpsLinkCheck,
   isArrayOfStrigs,
+  isBoolean,
 };
 
 // const {
